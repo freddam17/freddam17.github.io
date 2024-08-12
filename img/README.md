@@ -1,1 +1,1 @@
-# Carpeta img contendra las imagenes de esta pagina de información
+# Carpeta img contendra las imagenes de esta pagina de información en construcción
