@@ -1,1 +1,1 @@
-#Agreando información adicional del tratamiento de imagenes#
+# Agreando información adicional del tratamiento de imagenes
