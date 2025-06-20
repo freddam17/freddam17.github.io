@@ -1,0 +1,82 @@
+name: Initialize NPM Project
+
+on:
+  workflow_dispatch:
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Create package.json
+        run: |
+          if [ ! -f package.json ]; then
+            cat > package.json << 'EOF'
+          {
+            "name": "my-project",
+            "version": "1.0.0",
+            "description": "My GitHub Actions Project",
+            "main": "index.js",
+            "scripts": {
+              "test": "echo \"Info: no test specified\" && exit 0",
+              "build": "echo \"Building project...\" && mkdir -p dist && echo \"Build complete\" > dist/output.txt",
+              "lint": "echo \"Linting code...\" && exit 0",
+              "start": "echo \"Starting application...\""
+            },
+            "keywords": ["github-actions"],
+            "author": "",
+            "license": "MIT",
+            "devDependencies": {},
+            "dependencies": {}
+          }
+          EOF
+            echo "Created package.json"
+          else
+            echo "package.json already exists"
+          fi
+      
+      - name: Generate package-lock.json
+        run: |
+          if [ ! -f package-lock.json ]; then
+            npm install
+            echo "Created package-lock.json"
+          else
+            echo "package-lock.json already exists"
+          fi
+      
+      - name: Create basic project structure
+        run: |
+          mkdir -p src tests dist
+          
+          if [ ! -f src/index.js ]; then
+            echo "console.log('Hello from GitHub Actions!');" > src/index.js
+          fi
+          
+          if [ ! -f README.md ]; then
+            echo "# My Project" > README.md
+            echo "" >> README.md
+            echo "This project uses GitHub Actions for CI/CD" >> README.md
+          fi
+      
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Initialize NPM project structure"
+            git push
+          fi
