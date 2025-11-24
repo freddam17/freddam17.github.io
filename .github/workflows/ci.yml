@@ -11,7 +11,7 @@ jobs:
   basic-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       
       - name: Repository Info
         run: |
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: basic-check
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       
       - name: Detect project type and process
         run: |
